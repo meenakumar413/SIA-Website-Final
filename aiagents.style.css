@@ -1,84 +1,55 @@
-/* Global Styling */
 body {
+  font-family: 'Poppins', sans-serif;
   margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  color: #fff;
+  background: linear-gradient(135deg, #7b2ff7, #f107a3);
+  color: white;
 }
 
-/* Slide Container */
-.slide {
-  width: 100vw;
-  height: 100vh;
-  padding: 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  box-sizing: border-box;
-  position: relative;
-  page-break-after: always;
+header {
+  text-align: center;
+  padding: 40px 20px;
 }
 
-/* Backgrounds */
-.purple-bg {
-  background: linear-gradient(135deg, #4B0082, #8A2BE2);
-}
-
-.blue-bg {
-  background: linear-gradient(135deg, #003366, #1E90FF);
-}
-
-/* Logo */
 .logo {
-  position: absolute;
-  top: 30px;
-  right: 40px;
   width: 120px;
-  height: auto;
+  margin-bottom: 10px;
 }
 
-/* Headings */
-h1 {
-  font-size: 3em;
-  margin-bottom: 0.2em;
-  color: #ffffff;
-}
-
-h2 {
-  font-size: 2.2em;
-  margin-bottom: 0.4em;
-}
-
-h3 {
-  font-size: 1.5em;
-  color: #E6E6FA;
-  margin-bottom: 1em;
-}
-
-/* Lists */
-ul {
+.intro {
+  text-align: center;
   font-size: 1.2em;
-  line-height: 1.6em;
-  list-style-type: "• ";
+  max-width: 800px;
+  margin: 0 auto 40px;
 }
 
-/* Speaker Notes */
-.notes {
-  margin-top: 2em;
-  font-size: 0.95em;
-  color: #f0f0f0;
-  opacity: 0.9;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 10px;
+.content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 40px;
 }
 
-/* Print (PDF Export) Optimization */
-@media print {
-  .slide {
-    height: auto;
-    page-break-after: always;
-  }
-  .logo {
-    top: 20px;
-    right: 20px;
-  }
+.card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 20px;
+  text-align: left;
+}
+
+.btn {
+  display: block;
+  width: fit-content;
+  margin: 40px auto;
+  padding: 12px 28px;
+  background: white;
+  color: #7b2ff7;
+  font-weight: bold;
+  border-radius: 30px;
+  text-decoration: none;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.25);
 }
