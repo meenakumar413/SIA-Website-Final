@@ -1,107 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Skills and Innovation Academy (SIA)</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIA – Our Programs | Skills and Innovation Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        
+        .bg-sia-gradient {
+            background: linear-gradient(135deg, #6d28d9 0%, #2563eb 50%, #0891b2 100%);
+        }
+        
+        .text-sia-gradient {
+            background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hover-card-effect {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .hover-card-effect:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-modal { animation: fadeInScale 0.3s ease-out forwards; }
+    </style>
 </head>
-<body>
-  <!-- ===== HEADER ===== -->
-  <header>
-    <div class="container">
-      <div class="logo">
-        <img src="SIA-logo.png" alt="Skills and Innovation Academy Logo" class="logo-img">
-        <h1>Skills and Innovation Academy</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#programs">Programs</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<body class="bg-slate-50 text-slate-900">
+    <div id="root"></div>
 
-  <!-- ===== HERO SECTION ===== -->
-  <section id="hero">
-    <div class="container hero-content">
-      <div class="hero-text">
-        <h2>Empowering Young Minds to Innovate for Tomorrow</h2>
-        <p>Skills and Innovation Academy (SIA) is committed to preparing young minds for a rapidly changing future. Through a hands-on approach, we inspire children to innovate, think critically, and explore emerging technologies that will define tomorrow's world.</p>
-        <a href="#about" class="btn-primary">Learn More</a>
-      </div>
-      <div class="hero-image">
-        <img src="happy-children.jpg" alt="Happy children learning with laptops" />
-      </div>
-    </div>
-  </section>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-  <!-- ===== ABOUT SECTION ===== -->
-  <section id="about" class="section">
-    <div class="container">
-      <h2>About SIA</h2>
-      <p>
-        At SIA, we believe learning should be joyful, purposeful, and future-focused.
-        Our programs integrate creativity, design thinking, and cutting-edge technologies
-        to prepare children for the world of tomorrow. Through interactive workshops,
-        challenges, and innovation labs, students will learn how to solve real-world
-        problems using the skills and tools taught in our academy.
-      </p>
-      <p>
-        SIA, an academy where children are taught skills in AI Literacy, Generative AI,
-        Prompt Engineering, Vibe Coding and Green Skills to drive innovation.
-        Children will be the architects of their lives. Our learners will be equipped
-        with skills such as creativity, critical thinking, and problem solving.
-      </p>
-    </div>
-  </section>
+        const Icon = ({ name, className }) => {
+            useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [name]);
+            return <i data-lucide={name} className={className}></i>;
+        };
 
-  <!-- ===== PROGRAMS SECTION ===== -->
-  <section id="programs" class="section light-bg">
-    <div class="container">
-      <h2>Our Programs</h2>
-      <div class="program-grid">
-        <div class="program-card">
-          <h3>AI Literacy</h3>
-          <p>Introducing children to Artificial Intelligence concepts through storytelling, games, and projects.</p>
-        </div>
-        <div class="program-card">
-          <h3>Generative AI</h3>
-          <p>Hands-on learning to create with AI tools — art, music, and ideas powered by imagination.</p>
-        </div>
-        <div class="program-card">
-          <h3>Green Skills</h3>
-          <p>Building environmental awareness and sustainable innovation for a brighter, greener future.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+        const programs = [
+            { name: "AI Fundamentals", icon: "brain", cat: "AI", desc: "Unlock the core logic behind artificial intelligence through interactive learning." },
+            { name: "Generative AI", icon: "wand-2", cat: "AI", desc: "Master the art of creation using cutting-edge LLMs and image generation." },
+            { name: "Microsoft Copilot", icon: "cpu", cat: "AI", desc: "Learn to leverage AI assistants to supercharge daily productivity." },
+            { name: "AI Agents", icon: "bot", cat: "AI", desc: "Build autonomous digital workers that can perform complex tasks." },
+            { name: "Foundational AI Concepts", icon: "blocks", cat: "AI", desc: "A deep dive into the building blocks of modern machine learning." },
+            { name: "Prompt Engineering", icon: "terminal", cat: "AI", desc: "The art of communicating effectively with artificial intelligence." },
+            { name: "Ethics in AI", icon: "scale", cat: "AI", desc: "Navigating the moral landscape and social impact of automation." },
+            { name: "Industries", icon: "factory", cat: "Data", desc: "Exploring how data and AI are transforming global marketplaces." },
+            { name: "Financial Literacy", icon: "calculator", cat: "Data", desc: "Managing the future of digital currency and personal finance logic." },
+            { name: "Cybersecurity", icon: "shield-check", cat: "Data", desc: "Protecting digital identities in an increasingly connected world." },
+            { name: "Cloud Architecture", icon: "cloud", cat: "Cloud", desc: "Designing the scalable digital infrastructure of tomorrow." }
+        ];
 
-  <!-- ===== CONTACT SECTION ===== -->
-  <section id="contact" class="section">
-    <div class="container">
-      <h2>Contact Us</h2>
-      <p>Interested in joining or partnering with us? We’d love to hear from you.</p>
-      <a href="mailto:info@skillsinnovationacademy.org" class="btn-primary">Get in Touch</a>
-    </div>
-  </section>
+        const tracks = ["Children 5–8", "Kids 9–11", "Teens 12–16"];
 
-  <!-- ===== FOOTER ===== -->
-  <footer>
-    <div class="container">
-      <p>© 2025 Skills and Innovation Academy (SIA). All rights reserved.</p>
-    </div>
-  </footer>
+        function App() {
+            const [selectedProgram, setSelectedProgram] = useState(null);
+
+            return (
+                <div className="relative">
+                    {/* HERO BANNER */}
+                    <header className="relative py-24 px-6 bg-sia-gradient text-white overflow-hidden text-center">
+                        <div className="relative z-10 max-w-4xl mx-auto">
+                            <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-[3rem] inline-block mb-10 shadow-2xl">
+                                <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-none">SIA</h1>
+                                <div className="h-1 w-full bg-white/30 my-4 rounded-full"></div>
+                                <p className="text-xs md:text-sm font-black tracking-[0.4em] uppercase opacity-90">Skills and Innovation Academy</p>
+                            </div>
+                            <h2 className="text-4xl md:text-6xl font-extrabold mb-4">SIA – Our Programs</h2>
+                            <p className="text-lg opacity-80 max-w-2xl mx-auto font-medium">Empowering the next generation of innovators with specialized future-ready paths.</p>
+                        </div>
+                    </header>
+
+                    {/* MAIN PROGRAMS GRID */}
+                    <main className="max-w-7xl mx-auto px-6 py-24">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {programs.map((p, idx) => (
+                                <div key={idx} className="group bg-white rounded-[2.5rem] p-10 border border-slate-200 hover:border-violet-300 hover:shadow-2xl hover:shadow-violet-200/40 transition-all duration-500 flex flex-col hover-card-effect">
+                                    <div className="w-16 h-16 bg-slate-50 group-hover:bg-violet-50 rounded-2xl flex items-center justify-center mb-8 transition-all group-hover:rotate-6">
+                                        <Icon name={p.icon} className="w-8 h-8 text-slate-700 group-hover:text-violet-600" />
+                                    </div>
+
+                                    <h3 className="text-2xl font-extrabold text-slate-900 mb-3 leading-tight group-hover:text-blue-600 transition-colors">{p.name}</h3>
+                                    <p className="text-slate-500 text-sm leading-relaxed mb-10 flex-grow italic">"{p.desc}"</p>
+
+                                    <button 
+                                        onClick={() => setSelectedProgram(p)}
+                                        className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-4 rounded-2xl font-black text-sm hover:bg-sia-gradient shadow-xl transition-all active:scale-95"
+                                    >
+                                        Explore Tracks
+                                        <Icon name="arrow-right" className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* AGE TRACK MODAL */}
+                        {selectedProgram && (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setSelectedProgram(null)}></div>
+                                <div className="relative bg-white w-full max-w-5xl rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden animate-modal">
+                                    <div className="bg-sia-gradient p-8 sm:p-12 text-white flex justify-between items-center">
+                                        <div>
+                                            <h3 className="text-3xl sm:text-4xl font-black mb-2">{selectedProgram.name}</h3>
+                                            <p className="opacity-80 font-bold uppercase tracking-widest text-xs sm:text-sm">Select Your Age Track</p>
+                                        </div>
+                                        <button onClick={() => setSelectedProgram(null)} className="p-2 sm:p-3 bg-white/10 hover:bg-white/20 rounded-full transition">
+                                            <Icon name="x" className="w-6 h-6 sm:w-8 h-8" />
+                                        </button>
+                                    </div>
+                                    <div className="p-6 sm:p-12 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                                        {tracks.map(t => (
+                                            <div key={t} className="relative bg-slate-50 p-6 sm:p-8 rounded-[2rem] border-2 border-transparent hover:border-violet-400 hover:bg-white transition-all group overflow-hidden">
+                                                
+                                                {/* Price Badge Added Here */}
+                                                <div className="absolute top-0 right-0 bg-sia-gradient text-white px-4 py-2 rounded-bl-2xl font-black text-sm shadow-md">
+                                                    $35
+                                                </div>
+
+                                                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-violet-600 group-hover:text-white transition-colors">
+                                                    <Icon name="graduation-cap" className="w-6 h-6" />
+                                                </div>
+                                                <h4 className="text-xl font-black text-slate-900 mb-2">{t}</h4>
+                                                <p className="text-sm text-slate-500 mb-8 font-medium leading-relaxed">Curriculum specifically tailored for cognitive development and skills at this stage.</p>
+                                                <button className="w-full bg-slate-900 text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-sia-gradient transition-all shadow-lg active:scale-95">
+                                                    Enroll Now
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </main>
+
+                    {/* CONTACT SECTION */}
+                    <section id="contact" className="max-w-7xl mx-auto px-6 mb-24">
+                        <div className="bg-sia-gradient rounded-[4rem] p-12 lg:p-20 text-white shadow-2xl relative overflow-hidden">
+                            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16">
+                                <div>
+                                    <h2 className="text-4xl font-black mb-6">Contact Skills and Innovation Academy</h2>
+                                    <p className="text-xl opacity-90 mb-12 font-medium">Reach out for any inquiries, collaborations, or program details.</p>
+                                    <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20">
+                                        <h3 className="text-2xl font-bold mb-2">Get in Touch</h3>
+                                        <div className="flex items-center gap-3 text-xl font-black text-cyan-300">
+                                            <Icon name="mail" className="w-6 h-6" />
+                                            <span className="break-all">contact.siaacademy@gmail.com</span>
+                                        </div>
+                                        <p className="mt-4 text-xs opacity-60">Our team will respond within 1–2 business days.</p>
+                                    </div>
+                                </div>
+                                <div className="bg-white rounded-[3rem] p-10 text-slate-900">
+                                    <h3 className="text-3xl font-black mb-6 text-sia-gradient">About SIA</h3>
+                                    <ul className="space-y-4 mb-8">
+                                        {["Empowering young innovators", "Hands-on AI learning", "Inspiring curiosity"].map((item, i) => (
+                                            <li key={i} className="flex gap-4 font-bold text-slate-700">
+                                                <Icon name="check-circle-2" className="w-5 h-5 text-blue-500" /> {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <a href="https://meenakumar413.github.io/SIA-Website/" target="_blank" className="inline-block bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-sm hover:bg-sia-gradient transition-all">
+                                        Visit Full Website
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <footer className="bg-slate-900 py-12 text-center text-white/50">
+                        <p className="text-sm font-bold tracking-widest uppercase">© 2025 Skills and Innovation Academy (SIA)</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
-
-<nav>
-  <a href="ai_fundamentals.html">AI & ML Fundamentals</a> |
-  <a href="ai_agents_fundamentals.html">AI Agent Fundamentals</a>
-</nav>
