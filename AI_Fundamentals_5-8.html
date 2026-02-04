@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIA Academy | AI Fundamentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .bg-sia-gradient { background: linear-gradient(135deg, #6d28d9 0%, #2563eb 50%, #0891b2 100%); }
+        .text-sia-gradient { background: linear-gradient(90deg, #8b5cf6, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const Icon = ({ name, className }) => {
+            useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [name]);
+            return <i data-lucide={name} className={className}></i>;
+        };
+
+        // Slideshow content extracted from "Foundational AI Concepts - Ages 5-8.pptx"
+        const slideData = [
+            { title: "Explaining AI: Fun and Simple Ideas", content: "Welcome to Skills and Innovation Academy! Today we meet your smart computer helper." },
+            { title: "Agenda", content: "• What Is AI? • Big AI Ideas Made Simple • How We Talk to AI • Fun Creative Activities" },
+            { title: "AI Is a Smart Computer Helper", content: "A super-smart helper in computers that can recognize pictures and answer questions. It learns from examples just like practice!" },
+            { title: "How Does AI Learn?", content: "AI looks at many pictures (Input), finds patterns (like cat vs dog), and practices (Training) until it can give Results." },
+            { title: "Transformers: The Super Listeners", content: "1. Ingest words one by one. 2. Attend to what matters. 3. Build meaning. 4. Generate helpful answers." },
+            { title: "LLMs: Computers that Talk Like People", content: "Smart programs that learn from books and stories to chat like a helpful friend using words you know." },
+            { title: "Tokens: Word LEGO Blocks", content: "Tokens are small parts of words—like LEGO bricks—that AI puts together to build sentences and stories." },
+            { title: "Activity: Draw Your AI Friend", content: "What would a kind, helpful AI friend look like to you? Grab your crayons and sketch your helper!" }
+        ];
+
+        function App() {
+            const [isPaid, setIsPaid] = useState(false);
+            const [showCheckout, setShowCheckout] = useState(false);
+            const [currentSlide, setCurrentSlide] = useState(0);
+
+            return (
+                <div className="min-h-screen">
+                    {/* Header */}
+                    <nav className="bg-white border-b px-8 py-4 flex justify-between items-center sticky top-0 z-30">
+                        <div className="flex items-center gap-2">
+                            <div className="bg-sia-gradient p-1.5 rounded-lg text-white"><Icon name="graduation-cap" className="w-6 h-6"/></div>
+                            <span className="font-extrabold text-xl tracking-tighter">SIA <span className="text-blue-600">ACADEMY</span></span>
+                        </div>
+                        <button className="text-sm font-bold text-slate-500">Contact Support</button>
+                    </nav>
+
+                    {!isPaid ? (
+                        <div className="max-w-4xl mx-auto py-20 px-6">
+                            <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-slate-100 text-center">
+                                <div className="inline-block bg-indigo-50 text-indigo-600 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest mb-6">Course Enrollment</div>
+                                <h1 className="text-5xl font-black text-slate-900 mb-4">AI Fundamentals</h1>
+                                <p className="text-slate-500 text-lg mb-10 italic">Track: Children 5–8</p>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-left">
+                                    <div className="p-6 bg-slate-50 rounded-2xl"><Icon name="clock" className="w-6 h-6 mb-2 text-blue-500"/><p className="text-sm font-bold">1 Hour Session</p></div>
+                                    <div className="p-6 bg-slate-50 rounded-2xl"><Icon name="users" className="w-6 h-6 mb-2 text-purple-500"/><p className="text-sm font-bold">Ages 5-8</p></div>
+                                    <div className="p-6 bg-slate-50 rounded-2xl"><Icon name="medal" className="w-6 h-6 mb-2 text-amber-500"/><p className="text-sm font-bold">SIA Certificate</p></div>
+                                </div>
+
+                                <button 
+                                    onClick={() => setShowCheckout(true)}
+                                    className="bg-sia-gradient text-white px-12 py-5 rounded-2xl font-black text-xl shadow-xl hover:scale-105 transition-all"
+                                >
+                                    Enroll for $35
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        /* PPTX VIEWING SECTION (UNLOCKED) */
+                        <div className="max-w-5xl mx-auto py-12 px-6">
+                            <div className="mb-8 flex justify-between items-end">
+                                <div>
+                                    <h2 className="text-3xl font-black text-slate-900">Learning Dashboard</h2>
+                                    <p className="text-slate-500">Foundational AI Concepts - Ages 5-8</p>
+                                </div>
+                                <div className="text-right">
+                                    <span className="text-xs font-bold text-slate-400 uppercase">Progress</span>
+                                    <div className="w-32 h-2 bg-slate-200 rounded-full mt-1">
+                                        <div className="h-full bg-sia-gradient rounded-full" style={{width: `${((currentSlide + 1) / slideData.length) * 100}%`}}></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-white rounded-[3rem] shadow-2xl border-8 border-slate-900 overflow-hidden relative group">
+                                <div className="aspect-video flex flex-col items-center justify-center p-16 text-center bg-sia-gradient text-white">
+                                    <h2 className="text-5xl font-black mb-8 leading-tight">{slideData[currentSlide].title}</h2>
+                                    <p className="text-2xl opacity-90 leading-relaxed max-w-3xl whitespace-pre-line font-medium">
+                                        {slideData[currentSlide].content}
+                                    </p>
+                                </div>
+                                
+                                {/* Navigation Controls */}
+                                <div className="absolute inset-x-0 bottom-0 p-8 flex justify-between items-center bg-black/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button 
+                                        disabled={currentSlide === 0}
+                                        onClick={() => setCurrentSlide(prev => prev - 1)}
+                                        className="bg-white text-slate-900 p-4 rounded-full disabled:opacity-30 shadow-lg"
+                                    >
+                                        <Icon name="chevron-left" className="w-6 h-6"/>
+                                    </button>
+                                    <span className="font-bold text-white tracking-widest">SLIDE {currentSlide + 1} / {slideData.length}</span>
+                                    <button 
+                                        disabled={currentSlide === slideData.length - 1}
+                                        onClick={() => setCurrentSlide(prev => prev + 1)}
+                                        className="bg-white text-slate-900 p-4 rounded-full disabled:opacity-30 shadow-lg"
+                                    >
+                                        <Icon name="chevron-right" className="w-6 h-6"/>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div className="mt-8 text-center">
+                                <p className="text-slate-400 text-sm">© 2025 Skills and Innovation Academy - All Rights Reserved</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Checkout Overlay */}
+                    {showCheckout && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+                            <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setShowCheckout(false)}></div>
+                            <div className="relative bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl animate-in zoom-in duration-200">
+                                <h3 className="text-2xl font-black mb-2">Checkout</h3>
+                                <p className="text-slate-500 mb-8 font-medium italic">"Explaining AI: Fun and Simple Ideas"</p>
+                                
+                                <div className="space-y-4 mb-8">
+                                    <div className="flex justify-between border-b pb-4"><span className="text-slate-500">Course Fee</span><span className="font-bold">$35.00</span></div>
+                                    <div className="flex justify-between text-xl font-black pt-2"><span>Total</span><span className="text-sia-gradient">$35.00</span></div>
+                                </div>
+
+                                <button 
+                                    onClick={() => { setIsPaid(true); setShowCheckout(false); }}
+                                    className="w-full bg-sia-gradient text-white py-4 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all"
+                                >
+                                    Confirm & Pay
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
