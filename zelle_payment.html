@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIA Checkout</title>
+  <style>
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: #f8fafc;
+      padding: 40px;
+    }
+
+    .checkout {
+      max-width: 520px;
+      margin: auto;
+      background: white;
+      padding: 32px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.08);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: #4f46e5;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      margin-top: 16px;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .toggle {
+      display: flex;
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .toggle button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 999px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .toggle button.active {
+      background: linear-gradient(135deg,#6d3df5,#1b82e2);
+      color: white;
+      border: none;
+    }
+
+    .zelle-box {
+      background: #f1f5f9;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .checkout-btn {
+      margin-top: 28px;
+      width: 100%;
+      padding: 14px;
+      border-radius: 999px;
+      border: none;
+      background: #111827;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="checkout">
+  <h1>Enroll in AI Fundamentals</h1>
+  <div class="price">$35 per track</div>
+
+  <!-- Parent Info -->
+  <label>Parent Name</label>
+  <input id="parentName" placeholder="Jane Doe" />
+
+  <label>Email Address</label>
+  <input id="email" placeholder="parent@email.com" />
+
+  <label>Student Name</label>
+  <input id="student" placeholder="Student Name" />
+
+  <label>Age Track</label>
+  <select id="track">
+    <option>Children 5–8</option>
+    <option>Kids 9–11</option>
+    <option>Teens 12–16</option>
+  </select>
+
+  <!-- Payment Toggle -->
+  <div class="toggle">
+    <button id="zelleBtn" class="active" onclick="selectZelle()">Zelle</button>
+    <button onclick="selectPayPal()">PayPal</button>
+  </div>
+
+  <!-- Zelle Instructions -->
+  <div class="zelle-box" id="zelleBox">
+    <strong>Zelle Payment Instructions</strong><br><br>
+    Send <strong>$35</strong> via Zelle to:<br>
+    📧 <strong>YOUR_ZELLE_EMAIL</strong><br><br>
+    Use the <strong>student's name</strong> as the payment note.
+  </div>
+
+  <p style="font-size:0.8rem;color:#64748b;margin-top:12px;line-height:1.4;">Enrollment is confirmed after payment is received and verified.</p>
+
+  <button class="checkout-btn" onclick="completeCheckout()">Confirm & Continue</button>
+</div>
+
+<script>
+let paymentMethod = 'zelle';
+
+document.getElementById('zelleBox').style.display = 'block';
+
+function selectZelle() {
+  paymentMethod = 'zelle';
+  document.getElementById('zelleBtn').classList.add('active');
+  document.querySelector('.toggle button:last-child').classList.remove('active');
+  document.getElementById('zelleBox').style.display = 'block';
+}
+
+function selectPayPal() {
+  paymentMethod = 'paypal';
+  document.getElementById('zelleBtn').classList.remove('active');
+  document.querySelector('.toggle button:last-child').classList.add('active');
+  document.getElementById('zelleBox').style.display = 'none';
+}
+
+function completeCheckout() {
+  const name = document.getElementById('parentName').value;
+  const email = document.getElementById('email').value;
+
+  if (!name || !email) {
+    alert('Please fill in parent name and email');
+    return;
+  }
+
+  // Simulated email confirmation
+  console.log(`Sending confirmation email to ${email}`);
+
+  window.location.href = 'thank-you.html';
+}
+</script>
+
+</body>
+</html>
