@@ -29,6 +29,12 @@
         }
         .drawer-open { transform: translateX(0); }
         .drawer-closed { transform: translateX(100%); }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-modal { animation: fadeInScale 0.3s ease-out forwards; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
@@ -56,8 +62,11 @@
             { name: "Cloud Architecture", icon: "cloud", desc: "Designing scalable digital infrastructure." }
         ];
 
+        const tracks = ["Children 5–8", "Kids 9–11", "Teens 12–16"];
+
         function App() {
             const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+            const [selectedProgram, setSelectedProgram] = useState(null);
 
             return (
                 <div className="relative">
@@ -85,21 +94,69 @@
                         <p className="text-lg opacity-80 max-w-2xl mx-auto">11 Core Programs tailored for the next generation of innovators.</p>
                     </header>
 
-                    {/* PROGRAMS GRID */}
-                    <main className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {programs.map((p, idx) => (
-                            <div key={idx} className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm hover:shadow-xl transition-all group">
-                                <div className="w-12 h-12 bg-slate-100 group-hover:bg-violet-600 group-hover:text-white rounded-xl flex items-center justify-center mb-6 transition-colors">
-                                    <Icon name={p.icon} className="w-6 h-6" />
+                    {/* MAIN PROGRAMS GRID */}
+                    <main className="max-w-7xl mx-auto px-6 py-24">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {programs.map((p, idx) => (
+                                <div key={idx} className="group bg-white rounded-[2.5rem] p-10 border border-slate-200 hover:border-violet-300 hover:shadow-2xl hover:shadow-violet-200/40 transition-all duration-500 flex flex-col hover-card-effect">
+                                    <div className="w-16 h-16 bg-slate-50 group-hover:bg-violet-50 rounded-2xl flex items-center justify-center mb-8 transition-all group-hover:rotate-6">
+                                        <Icon name={p.icon} className="w-8 h-8 text-slate-700 group-hover:text-violet-600" />
+                                    </div>
+
+                                    <h3 className="text-2xl font-extrabold text-slate-900 mb-3 leading-tight group-hover:text-blue-600 transition-colors">{p.name}</h3>
+                                    <p className="text-slate-500 text-sm leading-relaxed mb-10 flex-grow italic">"{p.desc}"</p>
+
+                                    <button 
+                                        onClick={() => setSelectedProgram(p)}
+                                        className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-4 rounded-2xl font-black text-sm hover:bg-sia-gradient shadow-xl transition-all active:scale-95"
+                                    >
+                                        Explore Tracks
+                                        <Icon name="arrow-right" className="w-4 h-4" />
+                                    </button>
                                 </div>
-                                <h3 className="text-xl font-black mb-2">{p.name}</h3>
-                                <p className="text-slate-500 text-sm mb-6">{p.desc}</p>
-                                <button className="text-violet-600 font-bold text-sm flex items-center gap-2">Explore <Icon name="chevron-right" className="w-4 h-4"/></button>
+                            ))}
+                        </div>
+
+                        {/* AGE TRACK MODAL */}
+                        {selectedProgram && (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setSelectedProgram(null)}></div>
+                                <div className="relative bg-white w-full max-w-5xl rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden animate-modal">
+                                    <div className="bg-sia-gradient p-8 sm:p-12 text-white flex justify-between items-center">
+                                        <div>
+                                            <h3 className="text-3xl sm:text-4xl font-black mb-2">{selectedProgram.name}</h3>
+                                            <p className="opacity-80 font-bold uppercase tracking-widest text-xs sm:text-sm">Select Your Age Track</p>
+                                        </div>
+                                        <button onClick={() => setSelectedProgram(null)} className="p-2 sm:p-3 bg-white/10 hover:bg-white/20 rounded-full transition">
+                                            <Icon name="x" className="w-6 h-6 sm:w-8 h-8" />
+                                        </button>
+                                    </div>
+                                    <div className="p-6 sm:p-12 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                                        {tracks.map(t => (
+                                            <div key={t} className="relative bg-slate-50 p-6 sm:p-8 rounded-[2rem] border-2 border-transparent hover:border-violet-400 hover:bg-white transition-all group overflow-hidden">
+                                                
+                                                {/* $35 PRICE BADGE */}
+                                                <div className="absolute top-0 right-0 bg-sia-gradient text-white px-6 py-2 rounded-bl-3xl font-black text-xl shadow-lg z-10">
+                                                    $35
+                                                </div>
+
+                                                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-violet-600 group-hover:text-white transition-colors">
+                                                    <Icon name="graduation-cap" className="w-6 h-6" />
+                                                </div>
+                                                <h4 className="text-xl font-black text-slate-900 mb-2">{t}</h4>
+                                                <p className="text-sm text-slate-500 mb-8 font-medium leading-relaxed">Curriculum specifically tailored for cognitive development at this stage.</p>
+                                                <button className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-sia-gradient transition-all shadow-xl active:scale-95">
+                                                    Enroll Now
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
-                        ))}
+                        )}
                     </main>
 
-                    {/* CONTACT DRAWER (The "Separate Section") */}
+                    {/* CONTACT DRAWER */}
                     <div className={`fixed inset-0 z-50 ${isDrawerOpen ? 'visible' : 'invisible'}`}>
                         <div 
                             className={`absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-500 ${isDrawerOpen ? 'opacity-100' : 'opacity-0'}`}
@@ -115,7 +172,7 @@
                                 </button>
                             </div>
 
-                            {/* Drawer Content (Your Revised Code Sections) */}
+                            {/* Drawer Content */}
                             <div className="flex-grow overflow-y-auto p-8 space-y-10">
                                 <section>
                                     <h3 className="text-sm font-black uppercase tracking-widest text-violet-600 mb-2">Get in Touch</h3>
@@ -123,37 +180,18 @@
                                     <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200">
                                         <p className="text-xs font-bold text-slate-400 mb-1 uppercase">Email us directly:</p>
                                         <p className="text-lg font-black text-slate-900 break-all">📧 contact.siaacademy@gmail.com</p>
-                                        <p className="mt-4 text-xs italic text-slate-400">Our team will respond within 1–2 business days.</p>
                                     </div>
-                                </section>
-
-                                <section>
-                                    <h3 className="text-sm font-black uppercase tracking-widest text-blue-600 mb-4">About SIA</h3>
-                                    <ul className="space-y-4">
-                                        {[
-                                            "Empowering young innovators with future-ready skills",
-                                            "Hands-on learning in AI, creativity, and problem solving",
-                                            "Committed to inspiring curiosity and innovation"
-                                        ].map((text, i) => (
-                                            <li key={i} className="flex gap-3 text-sm font-bold text-slate-700">
-                                                <Icon name="check-circle-2" className="w-5 h-5 text-blue-500 flex-shrink-0" /> {text}
-                                            </li>
-                                        ))}
-                                    </ul>
                                 </section>
 
                                 <section>
                                     <h3 className="text-sm font-black uppercase tracking-widest text-indigo-600 mb-4">Follow Us</h3>
                                     <div className="grid grid-cols-1 gap-3">
-                                        <a href="https://meenakumar413.github.io/SIA-Website/" target="_blank" className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition font-bold">
-                                            <Icon name="globe" className="w-5 h-5 text-indigo-600" /> SIA Website
+                                        <a href="#" className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition font-bold">
+                                            <Icon name="linkedin" className="w-5 h-5 text-indigo-600" /> LinkedIn
                                         </a>
-                                        <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl opacity-50 font-bold cursor-not-allowed">
-                                            <Icon name="linkedin" className="w-5 h-5 text-slate-400" /> LinkedIn: Coming Soon
-                                        </div>
-                                        <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl opacity-50 font-bold cursor-not-allowed">
-                                            <Icon name="instagram" className="w-5 h-5 text-slate-400" /> Instagram: Coming Soon
-                                        </div>
+                                        <a href="#" className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition font-bold">
+                                            <Icon name="instagram" className="w-5 h-5 text-pink-600" /> Instagram
+                                        </a>
                                     </div>
                                 </section>
                             </div>
