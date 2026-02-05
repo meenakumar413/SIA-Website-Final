@@ -17,12 +17,6 @@
             background: linear-gradient(135deg, #6d28d9 0%, #2563eb 50%, #0891b2 100%);
         }
         
-        .text-sia-gradient {
-            background: linear-gradient(90deg, #8b5cf6, #06b6d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
         /* Drawer Animation */
         .contact-drawer {
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -35,6 +29,15 @@
             to { opacity: 1; transform: scale(1); }
         }
         .animate-modal { animation: fadeInScale 0.3s ease-out forwards; }
+        
+        /* Fade transition for switching sections */
+        .section-fade {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
@@ -67,18 +70,29 @@
         function App() {
             const [isDrawerOpen, setIsDrawerOpen] = useState(false);
             const [selectedProgram, setSelectedProgram] = useState(null);
+            const [activeTab, setActiveTab] = useState('programs'); // 'programs' or 'about'
 
             return (
                 <div className="relative">
                     {/* TOP NAVIGATION */}
                     <nav className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-40 px-8 py-4 flex justify-between items-center">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('programs')}>
                             <div className="bg-sia-gradient p-1.5 rounded-lg text-white"><Icon name="graduation-cap" className="w-6 h-6"/></div>
                             <span className="font-extrabold text-xl tracking-tighter uppercase">SIA</span>
                         </div>
                         <ul className="hidden lg:flex gap-8 text-sm font-bold text-slate-600">
-                            <li className="hover:text-violet-600 cursor-pointer">Programs</li>
-                            <li className="hover:text-violet-600 cursor-pointer">About</li>
+                            <li 
+                                className={`cursor-pointer transition-colors ${activeTab === 'programs' ? 'text-violet-600' : 'hover:text-violet-600'}`}
+                                onClick={() => setActiveTab('programs')}
+                            >
+                                Programs
+                            </li>
+                            <li 
+                                className={`cursor-pointer transition-colors ${activeTab === 'about' ? 'text-violet-600' : 'hover:text-violet-600'}`}
+                                onClick={() => setActiveTab('about')}
+                            >
+                                About
+                            </li>
                             <li 
                                 onClick={() => setIsDrawerOpen(true)}
                                 className="text-violet-600 cursor-pointer flex items-center gap-1"
@@ -88,91 +102,131 @@
                         </ul>
                     </nav>
 
-                    {/* HERO */}
+                    {/* HERO (Shared or Conditional) */}
                     <header className="py-24 px-6 bg-sia-gradient text-white text-center">
-                        <h1 className="text-6xl font-black mb-4">SIA – Our Programs</h1>
-                        <p className="text-lg opacity-80 max-w-2xl mx-auto">11 Core Programs tailored for the next generation of innovators.</p>
+                        <h1 className="text-6xl font-black mb-4">
+                            {activeTab === 'programs' ? 'SIA – Our Programs' : 'Welcome to SIA'}
+                        </h1>
+                        <p className="text-lg opacity-80 max-w-2xl mx-auto">
+                            {activeTab === 'programs' 
+                                ? '11 Core Programs tailored for the next generation of innovators.' 
+                                : 'Empowering the next generation of digital leaders.'}
+                        </p>
                     </header>
 
-                    {/* MAIN PROGRAMS GRID */}
-                    <main className="max-w-7xl mx-auto px-6 py-24">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {programs.map((p, idx) => (
-                                <div key={idx} className="group bg-white rounded-[2.5rem] p-10 border border-slate-200 hover:border-violet-300 hover:shadow-2xl hover:shadow-violet-200/40 transition-all duration-500 flex flex-col hover-card-effect">
-                                    <div className="w-16 h-16 bg-slate-50 group-hover:bg-violet-50 rounded-2xl flex items-center justify-center mb-8 transition-all group-hover:rotate-6">
-                                        <Icon name={p.icon} className="w-8 h-8 text-slate-700 group-hover:text-violet-600" />
+                    {/* DYNAMIC CONTENT SECTION */}
+                    <div className="section-fade">
+                        {activeTab === 'programs' ? (
+                            /* PROGRAMS GRID */
+                            <main className="max-w-7xl mx-auto px-6 py-24">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    {programs.map((p, idx) => (
+                                        <div key={idx} className="group bg-white rounded-[2.5rem] p-10 border border-slate-200 hover:border-violet-300 hover:shadow-2xl hover:shadow-violet-200/40 transition-all duration-500 flex flex-col">
+                                            <div className="w-16 h-16 bg-slate-50 group-hover:bg-violet-50 rounded-2xl flex items-center justify-center mb-8 transition-all group-hover:rotate-6">
+                                                <Icon name={p.icon} className="w-8 h-8 text-slate-700 group-hover:text-violet-600" />
+                                            </div>
+                                            <h3 className="text-2xl font-extrabold text-slate-900 mb-3 leading-tight group-hover:text-blue-600 transition-colors">{p.name}</h3>
+                                            <p className="text-slate-500 text-sm leading-relaxed mb-10 flex-grow italic">"{p.desc}"</p>
+                                            <button 
+                                                onClick={() => setSelectedProgram(p)}
+                                                className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-4 rounded-2xl font-black text-sm hover:bg-sia-gradient shadow-xl transition-all active:scale-95"
+                                            >
+                                                Explore Tracks
+                                                <Icon name="arrow-right" className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </main>
+                        ) : (
+                            /* THE NEW ABOUT SECTION */
+                            <section id="about" style={{padding: '100px 20px', background: '#ffffff'}}>
+                                <div style={{maxWidth: '1100px', margin: 'auto'}}>
+                                    <div style={{textAlign: 'center', marginBottom: '70px'}}>
+                                        <h2 style={{fontSize: '2.8rem', fontWeight: '800', background: 'linear-gradient(135deg, #6d3df5, #1b82e2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px'}}>
+                                            About Skills & Innovation Academy
+                                        </h2>
+                                        <p style={{maxWidth: '760px', margin: 'auto', fontSize: '1.1rem', color: '#475569', lineHeight: '1.8'}}>
+                                            Skills & Innovation Academy (SIA) empowers children and teens with future-ready skills in artificial intelligence, data, and emerging technologies through engaging, age-appropriate, and hands-on learning.
+                                        </p>
                                     </div>
 
-                                    <h3 className="text-2xl font-extrabold text-slate-900 mb-3 leading-tight group-hover:text-blue-600 transition-colors">{p.name}</h3>
-                                    <p className="text-slate-500 text-sm leading-relaxed mb-10 flex-grow italic">"{p.desc}"</p>
+                                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px', marginBottom: '80px'}}>
+                                        <div style={{background: '#f8fafc', borderRadius: '20px', padding: '40px', boxShadow: '0 14px 30px rgba(0,0,0,0.08)'}}>
+                                            <h3 style={{fontSize: '1.6rem', fontWeight: '800', color: '#0f172a', marginBottom: '14px'}}>🎯 Our Mission</h3>
+                                            <p style={{fontSize: '1rem', lineHeight: '1.7', color: '#475569'}}>
+                                                Our mission is to make advanced technology education accessible, engaging, and meaningful for young learners. We focus on building critical thinking, creativity, problem-solving, and ethical awareness—empowering students to confidently navigate and shape the future.
+                                            </p>
+                                        </div>
+                                        <div style={{background: 'linear-gradient(135deg, #6d3df5, #1b82e2)', color: 'white', borderRadius: '20px', padding: '40px', boxShadow: '0 18px 45px rgba(109,61,245,0.35)'}}>
+                                            <h3 style={{fontSize: '1.6rem', fontWeight: '800', marginBottom: '14px'}}>🌍 Our Vision</h3>
+                                            <p style={{fontSize: '1rem', lineHeight: '1.7', opacity: '0.95'}}>
+                                                Our vision is to nurture a generation of curious, confident, and responsible innovators who understand technology not just as users—but as creators, thinkers, and leaders in a rapidly evolving digital world.
+                                            </p>
+                                        </div>
+                                    </div>
 
-                                    <button 
-                                        onClick={() => setSelectedProgram(p)}
-                                        className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-4 rounded-2xl font-black text-sm hover:bg-sia-gradient shadow-xl transition-all active:scale-95"
-                                    >
-                                        Explore Tracks
-                                        <Icon name="arrow-right" className="w-4 h-4" />
+                                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', textAlign: 'center'}}>
+                                        <div className="hover-card-effect" style={{background: '#ffffff', borderRadius: '20px', padding: '40px 30px', boxShadow: '0 14px 30px rgba(0,0,0,0.08)', transition: 'transform 0.3s ease'}}>
+                                            <div style={{fontSize: '2.6rem', marginBottom: '14px'}}>🌟</div>
+                                            <h4 style={{fontSize: '1.3rem', fontWeight: '700', marginBottom: '12px'}}>Why SIA</h4>
+                                            <p style={{fontSize: '0.95rem', lineHeight: '1.7', color: '#64748b'}}> We focus on future skills, ethical AI awareness, and confidence-building—not just coding, but thinking and innovation.</p>
+                                        </div>
+                                        <div className="hover-card-effect" style={{background: '#ffffff', borderRadius: '20px', padding: '40px 30px', boxShadow: '0 14px 30px rgba(0,0,0,0.08)', transition: 'transform 0.3s ease'}}>
+                                            <div style={{fontSize: '2.6rem', marginBottom: '14px'}}>🧠</div>
+                                            <h4 style={{fontSize: '1.3rem', fontWeight: '700', marginBottom: '12px'}}>How We Teach</h4>
+                                            <p style={{fontSize: '0.95rem', lineHeight: '1.7', color: '#64748b'}}>Through hands-on projects, real-world examples, and guided exploration, tailored to each age group.</p>
+                                        </div>
+                                        <div className="hover-card-effect" style={{background: '#ffffff', borderRadius: '20px', padding: '40px 30px', boxShadow: '0 14px 30px rgba(0,0,0,0.08)', transition: 'transform 0.3s ease'}}>
+                                            <div style={{fontSize: '2.6rem', marginBottom: '14px'}}>🚀</div>
+                                            <h4 style={{fontSize: '1.3rem', fontWeight: '700', marginBottom: '12px'}}>What Learners Gain</h4>
+                                            <p style={{fontSize: '0.95rem', lineHeight: '1.7', color: '#64748b'}}>Strong foundations in AI and technology, critical thinking skills, creativity, and confidence for the future.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+                    </div>
+
+                    {/* AGE TRACK MODAL (Only active in Programs view) */}
+                    {selectedProgram && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                            <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setSelectedProgram(null)}></div>
+                            <div className="relative bg-white w-full max-w-5xl rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden animate-modal">
+                                <div className="bg-sia-gradient p-8 sm:p-12 text-white flex justify-between items-center">
+                                    <div>
+                                        <h3 className="text-3xl sm:text-4xl font-black mb-2">{selectedProgram.name}</h3>
+                                        <p className="opacity-80 font-bold uppercase tracking-widest text-xs sm:text-sm">Select Your Age Track</p>
+                                    </div>
+                                    <button onClick={() => setSelectedProgram(null)} className="p-2 sm:p-3 bg-white/10 hover:bg-white/20 rounded-full transition">
+                                        <Icon name="x" className="w-6 h-6 sm:w-8 h-8" />
                                     </button>
                                 </div>
-                            ))}
-                        </div>
-
-                        {/* AGE TRACK MODAL */}
-                        {selectedProgram && (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-                                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setSelectedProgram(null)}></div>
-                                <div className="relative bg-white w-full max-w-5xl rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden animate-modal">
-                                    <div className="bg-sia-gradient p-8 sm:p-12 text-white flex justify-between items-center">
-                                        <div>
-                                            <h3 className="text-3xl sm:text-4xl font-black mb-2">{selectedProgram.name}</h3>
-                                            <p className="opacity-80 font-bold uppercase tracking-widest text-xs sm:text-sm">Select Your Age Track</p>
-                                        </div>
-                                        <button onClick={() => setSelectedProgram(null)} className="p-2 sm:p-3 bg-white/10 hover:bg-white/20 rounded-full transition">
-                                            <Icon name="x" className="w-6 h-6 sm:w-8 h-8" />
-                                        </button>
-                                    </div>
-                                    <div className="p-6 sm:p-12 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                                        {tracks.map(t => (
-                                            <div key={t} className="relative bg-slate-50 p-6 sm:p-8 rounded-[2rem] border-2 border-transparent hover:border-violet-400 hover:bg-white transition-all group overflow-hidden">
-                                                
-                                                {/* $35 PRICE BADGE */}
-                                                <div className="absolute top-0 right-0 bg-sia-gradient text-white px-6 py-2 rounded-bl-3xl font-black text-xl shadow-lg z-10">
-                                                    $35
-                                                </div>
-
-                                                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-violet-600 group-hover:text-white transition-colors">
-                                                    <Icon name="graduation-cap" className="w-6 h-6" />
-                                                </div>
-                                                <h4 className="text-xl font-black text-slate-900 mb-2">{t}</h4>
-                                                <p className="text-sm text-slate-500 mb-8 font-medium leading-relaxed">Curriculum specifically tailored for cognitive development at this stage.</p>
-                                                <button className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-sia-gradient transition-all shadow-xl active:scale-95">
-                                                    Enroll Now
-                                                </button>
+                                <div className="p-6 sm:p-12 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                                    {tracks.map(t => (
+                                        <div key={t} className="relative bg-slate-50 p-6 sm:p-8 rounded-[2rem] border-2 border-transparent hover:border-violet-400 hover:bg-white transition-all group overflow-hidden">
+                                            <div className="absolute top-0 right-0 bg-sia-gradient text-white px-6 py-2 rounded-bl-3xl font-black text-xl shadow-lg z-10">$35</div>
+                                            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-violet-600 group-hover:text-white transition-colors">
+                                                <Icon name="graduation-cap" className="w-6 h-6" />
                                             </div>
-                                        ))}
-                                    </div>
+                                            <h4 className="text-xl font-black text-slate-900 mb-2">{t}</h4>
+                                            <p className="text-sm text-slate-500 mb-8 font-medium leading-relaxed">Curriculum specifically tailored for cognitive development at this stage.</p>
+                                            <button className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-sia-gradient transition-all shadow-xl active:scale-95">Enroll Now</button>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                        )}
-                    </main>
+                        </div>
+                    )}
 
                     {/* CONTACT DRAWER */}
                     <div className={`fixed inset-0 z-50 ${isDrawerOpen ? 'visible' : 'invisible'}`}>
-                        <div 
-                            className={`absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-500 ${isDrawerOpen ? 'opacity-100' : 'opacity-0'}`}
-                            onClick={() => setIsDrawerOpen(false)}
-                        ></div>
-                        
+                        <div className={`absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-500 ${isDrawerOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsDrawerOpen(false)}></div>
                         <div className={`absolute right-0 top-0 h-full w-full max-w-lg bg-white shadow-2xl contact-drawer ${isDrawerOpen ? 'drawer-open' : 'drawer-closed'} flex flex-col`}>
-                            {/* Drawer Header */}
                             <div className="bg-sia-gradient p-8 text-white flex justify-between items-center">
                                 <h2 className="text-2xl font-black">Contact SIA</h2>
-                                <button onClick={() => setIsDrawerOpen(false)} className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition">
-                                    <Icon name="x" className="w-6 h-6" />
-                                </button>
+                                <button onClick={() => setIsDrawerOpen(false)} className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition"><Icon name="x" className="w-6 h-6" /></button>
                             </div>
-
-                            {/* Drawer Content */}
                             <div className="flex-grow overflow-y-auto p-8 space-y-10">
                                 <section>
                                     <h3 className="text-sm font-black uppercase tracking-widest text-violet-600 mb-2">Get in Touch</h3>
@@ -182,37 +236,24 @@
                                         <p className="text-lg font-black text-slate-900 break-all">📧 contact.siaacademy@gmail.com</p>
                                     </div>
                                 </section>
-
                                 <section>
                                     <h3 className="text-sm font-black uppercase tracking-widest text-indigo-600 mb-4">Follow Us</h3>
                                     <div className="grid grid-cols-1 gap-3">
-                                        <a href="#" className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition font-bold">
-                                            <Icon name="linkedin" className="w-5 h-5 text-indigo-600" /> LinkedIn
-                                        </a>
-                                        <a href="#" className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition font-bold">
-                                            <Icon name="instagram" className="w-5 h-5 text-pink-600" /> Instagram
-                                        </a>
+                                        <a href="#" className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition font-bold"><Icon name="linkedin" className="w-5 h-5 text-indigo-600" /> LinkedIn</a>
+                                        <a href="#" className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition font-bold"><Icon name="instagram" className="w-5 h-5 text-pink-600" /> Instagram</a>
                                     </div>
                                 </section>
                             </div>
-
-                            <footer className="p-8 border-t text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                © 2025 Skills and Innovation Academy (SIA)
-                            </footer>
+                            <footer className="p-8 border-t text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">© 2025 Skills and Innovation Academy (SIA)</footer>
                         </div>
                     </div>
 
                     {/* FLOATING CONTACT ICON */}
-                    <button 
-                        onClick={() => setIsDrawerOpen(true)}
-                        className="fixed bottom-8 right-8 w-16 h-16 bg-sia-gradient text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40"
-                    >
+                    <button onClick={() => setIsDrawerOpen(true)} className="fixed bottom-8 right-8 w-16 h-16 bg-sia-gradient text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40">
                         <Icon name="message-circle" className="w-8 h-8" />
                     </button>
 
-                    <footer className="py-12 text-center text-slate-400 text-sm font-bold">
-                        © 2025 Skills and Innovation Academy (SIA)
-                    </footer>
+                    <footer className="py-12 text-center text-slate-400 text-sm font-bold">© 2025 Skills and Innovation Academy (SIA)</footer>
                 </div>
             );
         }
