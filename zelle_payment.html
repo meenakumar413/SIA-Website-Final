@@ -1,171 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIA Checkout</title>
-  <style>
-    body {
-      font-family: Inter, system-ui, sans-serif;
-      background: #f8fafc;
-      padding: 40px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIA – Enrollment & Payment | Skills and Innovation Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        
+        .bg-sia-gradient { 
+            background: linear-gradient(135deg, #6d28d9 0%, #2563eb 50%, #0891b2 100%); 
+        }
+        
+        .animate-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
 
-    .checkout {
-      max-width: 520px;
-      margin: auto;
-      background: white;
-      padding: 32px;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,.08);
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-    }
-
-    .price {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      color: #4f46e5;
-    }
-
-    label {
-      display: block;
-      font-size: 0.9rem;
-      margin-top: 16px;
-      font-weight: 600;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-    }
-
-    .toggle {
-      display: flex;
-      gap: 10px;
-      margin: 24px 0;
-    }
-
-    .toggle button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 999px;
-      border: 2px solid #e5e7eb;
-      background: white;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .toggle button.active {
-      background: linear-gradient(135deg,#6d3df5,#1b82e2);
-      color: white;
-      border: none;
-    }
-
-    .zelle-box {
-      background: #f1f5f9;
-      padding: 16px;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      display: none;
-    }
-
-    .checkout-btn {
-      margin-top: 28px;
-      width: 100%;
-      padding: 14px;
-      border-radius: 999px;
-      border: none;
-      background: #111827;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-    }
-  </style>
+        /* Custom checkout styles integrated into Tailwind */
+        .checkout-input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .checkout-input:focus {
+            border-color: #6d28d9;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+<div id="root"></div>
 
-<div class="checkout">
-  <h1>Enroll in AI Fundamentals</h1>
-  <div class="price">$35 per track</div>
+<script type="text/babel">
+const { useState, useEffect } = React;
 
-  <!-- Parent Info -->
-  <label>Parent Name</label>
-  <input id="parentName" placeholder="Jane Doe" />
+const Icon = ({ name, className }) => {
+    useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [name]);
+    return <i data-lucide={name} className={className}></i>;
+};
 
-  <label>Email Address</label>
-  <input id="email" placeholder="parent@email.com" />
+const programs = [
+    { name: "AI Fundamentals", icon: "brain" },
+    { name: "Generative AI", icon: "wand-2" },
+    { name: "Microsoft Copilot", icon: "cpu" },
+    { name: "AI Agents", icon: "bot" },
+    { name: "Prompt Engineering", icon: "terminal" },
+    { name: "Cybersecurity", icon: "shield-check" },
+    { name: "Cloud Architecture", icon: "cloud" }
+];
 
-  <label>Student Name</label>
-  <input id="student" placeholder="Student Name" />
+const tracks = ["Children 5–8", "Kids 9–11", "Teens 12–16"];
 
-  <label>Age Track</label>
-  <select id="track">
-    <option>Children 5–8</option>
-    <option>Kids 9–11</option>
-    <option>Teens 12–16</option>
-  </select>
+function App() {
+    // view can be 'programs' or 'checkout'
+    const [view, setView] = useState('programs');
+    const [selectedProgram, setSelectedProgram] = useState(null);
+    const [selectedTrack, setSelectedTrack] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState('zelle');
 
-  <!-- Payment Toggle -->
-  <div class="toggle">
-    <button id="zelleBtn" class="active" onclick="selectZelle()">Zelle</button>
-    <button onclick="selectPayPal()">PayPal</button>
-  </div>
+    const handleEnrollClick = (trackName) => {
+        setSelectedTrack(trackName);
+        setView('checkout');
+        window.scrollTo(0, 0);
+    };
 
-  <!-- Zelle Instructions -->
-  <div class="zelle-box" id="zelleBox">
-    <strong>Zelle Payment Instructions</strong><br><br>
-    Send <strong>$35</strong> via Zelle to:<br>
-    📧 <strong>YOUR_ZELLE_EMAIL</strong><br><br>
-    Use the <strong>student's name</strong> as the payment note.
-  </div>
+    const handleConfirm = () => {
+        const name = document.getElementById('parentName').value;
+        const email = document.getElementById('email').value;
 
-  <p style="font-size:0.8rem;color:#64748b;margin-top:12px;line-height:1.4;">Enrollment is confirmed after payment is received and verified.</p>
+        if (!name || !email) {
+            alert('Please fill in parent name and email');
+            return;
+        }
+        // Proceed to a thank you state or external page
+        alert(`Thank you ${name}! Enrollment request sent for ${selectedProgram.name} (${selectedTrack}).`);
+        setView('programs');
+        setSelectedProgram(null);
+    };
 
-  <button class="checkout-btn" onclick="completeCheckout()">Confirm & Continue</button>
-</div>
+    if (view === 'checkout') {
+        return (
+            <div className="min-h-screen py-12 px-6 animate-in">
+                <button 
+                    onClick={() => setView('programs')}
+                    className="mb-8 flex items-center gap-2 text-slate-500 font-bold hover:text-slate-900 transition mx-auto max-w-lg w-full"
+                >
+                    <Icon name="arrow-left" className="w-4 h-4" /> Back to Programs
+                </button>
 
-<script>
-let paymentMethod = 'zelle';
+                <div className="max-w-lg mx-auto bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-slate-100">
+                    <div className="text-center mb-8">
+                        <div className="inline-block bg-sia-gradient p-3 rounded-2xl text-white mb-4">
+                            <Icon name={selectedProgram.icon} className="w-8 h-8" />
+                        </div>
+                        <h1 className="text-3xl font-black text-slate-900">Enrollment</h1>
+                        <p className="text-slate-500 font-medium">{selectedProgram.name} • {selectedTrack}</p>
+                        <div className="text-2xl font-black text-violet-600 mt-2">$35</div>
+                    </div>
 
-document.getElementById('zelleBox').style.display = 'block';
+                    <div className="space-y-4">
+                        <div>
+                            <label className="text-sm font-bold text-slate-700 ml-1">Parent Name</label>
+                            <input id="parentName" className="checkout-input" placeholder="Jane Doe" />
+                        </div>
+                        <div>
+                            <label className="text-sm font-bold text-slate-700 ml-1">Email Address</label>
+                            <input id="email" type="email" className="checkout-input" placeholder="parent@email.com" />
+                        </div>
+                        <div>
+                            <label className="text-sm font-bold text-slate-700 ml-1">Student Name</label>
+                            <input id="student" className="checkout-input" placeholder="Student's Full Name" />
+                        </div>
+                    </div>
 
-function selectZelle() {
-  paymentMethod = 'zelle';
-  document.getElementById('zelleBtn').classList.add('active');
-  document.querySelector('.toggle button:last-child').classList.remove('active');
-  document.getElementById('zelleBox').style.display = 'block';
+                    <div className="flex gap-3 my-8">
+                        <button 
+                            onClick={() => setPaymentMethod('zelle')}
+                            className={`flex-1 py-3 rounded-full font-bold transition-all ${paymentMethod === 'zelle' ? 'bg-sia-gradient text-white shadow-lg' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                        >
+                            Zelle
+                        </button>
+                        <button 
+                            onClick={() => setPaymentMethod('paypal')}
+                            className={`flex-1 py-3 rounded-full font-bold transition-all ${paymentMethod === 'paypal' ? 'bg-sia-gradient text-white shadow-lg' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                        >
+                            PayPal
+                        </button>
+                    </div>
+
+                    {paymentMethod === 'zelle' ? (
+                        <div className="bg-slate-50 p-6 rounded-2xl border border-dashed border-slate-300 mb-6">
+                            <h3 className="font-black text-slate-900 mb-2 flex items-center gap-2">
+                                <Icon name="info" className="w-4 h-4 text-violet-600" /> Zelle Instructions
+                            </h3>
+                            <p className="text-sm text-slate-600 leading-relaxed">
+                                Send <span className="font-bold text-slate-900">$35</span> to:<br/>
+                                <span className="font-black text-violet-600 text-base">contact.siaacademy@gmail.com</span><br/>
+                                <span className="text-xs mt-2 block italic text-slate-400">Note: Please include the student's name in the Zelle memo.</span>
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="bg-blue-50 p-6 rounded-2xl border border-dashed border-blue-200 mb-6 text-center">
+                            <p className="text-sm text-blue-700 font-bold">You will be redirected to PayPal after clicking confirm.</p>
+                        </div>
+                    )}
+
+                    <p className="text-[11px] text-slate-400 text-center mb-6 leading-tight">
+                        Enrollment is finalized once the payment is verified by our team. You will receive a confirmation email within 24 hours.
+                    </p>
+
+                    <button 
+                        onClick={handleConfirm}
+                        className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
+                    >
+                        Confirm & Complete
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="animate-in">
+            <header className="py-24 bg-sia-gradient text-white text-center px-6">
+                <h1 className="text-5xl md:text-6xl font-black mb-4">SIA – Our Programs</h1>
+                <p className="opacity-90 text-lg font-medium max-w-2xl mx-auto">Master the future with 11 core programs designed for the innovators of tomorrow.</p>
+            </header>
+
+            <main className="max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {programs.map((p, i) => (
+                    <div key={i} className="group bg-white rounded-[2.5rem] p-10 border border-slate-200 hover:border-violet-300 hover:shadow-2xl transition-all duration-300">
+                        <div className="w-16 h-16 bg-slate-50 group-hover:bg-violet-50 rounded-2xl flex items-center justify-center mb-8 transition-colors">
+                            <Icon name={p.icon} className="w-8 h-8 text-slate-700 group-hover:text-violet-600" />
+                        </div>
+                        <h3 className="text-2xl font-black mb-8 text-slate-900">{p.name}</h3>
+                        <button
+                            onClick={() => setSelectedProgram(p)}
+                            className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-4 rounded-2xl font-black hover:bg-sia-gradient transition-all active:scale-95"
+                        >
+                            Explore Tracks
+                            <Icon name="chevron-right" className="w-4 h-4" />
+                        </button>
+                    </div>
+                ))}
+            </main>
+
+            {selectedProgram && (
+                <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-6 z-50">
+                    <div className="bg-white rounded-[3rem] w-full max-w-4xl overflow-hidden shadow-2xl animate-in">
+                        <div className="bg-sia-gradient p-10 text-white flex justify-between items-center">
+                            <div>
+                                <h2 className="text-3xl font-black">{selectedProgram.name}</h2>
+                                <p className="opacity-80 font-bold uppercase tracking-widest text-xs mt-1">Select Age Track</p>
+                            </div>
+                            <button 
+                                onClick={() => setSelectedProgram(null)}
+                                className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition"
+                            >
+                                <Icon name="x" className="w-6 h-6" />
+                            </button>
+                        </div>
+                        <div className="p-10 grid md:grid-cols-3 gap-6">
+                            {tracks.map(track => (
+                                <div key={track} className="bg-slate-50 rounded-[2rem] p-8 border-2 border-transparent hover:border-violet-200 transition-all relative group">
+                                    <div className="absolute top-0 right-0 bg-sia-gradient text-white px-5 py-2 rounded-bl-2xl font-black shadow-lg">$35</div>
+                                    <h4 className="font-black text-xl mb-3 text-slate-900">{track}</h4>
+                                    <p className="text-sm text-slate-500 mb-8 leading-relaxed">Specialized curriculum tailored for this development stage.</p>
+                                    <button
+                                        onClick={() => handleEnrollClick(track)}
+                                        className="w-full bg-slate-900 text-white py-4 rounded-xl font-black hover:bg-sia-gradient transition shadow-lg active:scale-95"
+                                    >
+                                        Enroll Now
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <footer className="py-12 text-center text-slate-400 text-sm font-bold border-t">
+                © 2025 Skills and Innovation Academy (SIA)
+            </footer>
+        </div>
+    );
 }
 
-function selectPayPal() {
-  paymentMethod = 'paypal';
-  document.getElementById('zelleBtn').classList.remove('active');
-  document.querySelector('.toggle button:last-child').classList.add('active');
-  document.getElementById('zelleBox').style.display = 'none';
-}
-
-function completeCheckout() {
-  const name = document.getElementById('parentName').value;
-  const email = document.getElementById('email').value;
-
-  if (!name || !email) {
-    alert('Please fill in parent name and email');
-    return;
-  }
-
-  // Simulated email confirmation
-  console.log(`Sending confirmation email to ${email}`);
-
-  window.location.href = 'thank-you.html';
-}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
-
 </body>
 </html>
