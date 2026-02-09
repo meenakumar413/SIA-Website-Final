@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parent Consent & Enrollment | Skills & Innovation Academy</title>
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f6f8fb;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    h1, h2 {
+      color: #1f3c88;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+
+    /* ===== Clean checkbox alignment ===== */
+    .consent-section {
+      margin-top: 25px;
+    }
+
+    .consent-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .consent-item input[type="checkbox"] {
+      margin-top: 4px;
+    }
+
+    .consent-item label {
+      font-weight: normal;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .consent-item a {
+      color: #1f3c88;
+      text-decoration: underline;
+    }
+
+    button {
+      margin-top: 30px;
+      background-color: #1f3c88;
+      color: #fff;
+      padding: 14px 26px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #162f6b;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #777;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>Parent Consent & Enrollment Form</h1>
+
+    <p>
+      This form must be completed by a parent or legal guardian to enroll a child
+      in programs offered by <strong>Skills & Innovation Academy (SIA)</strong>.
+    </p>
+
+    <h2>Child Information</h2>
+
+    <label>Child’s Full Name</label>
+    <input type="text" required />
+
+    <label>Child’s Age</label>
+    <input type="number" required />
+
+    <label>Program / Course Name</label>
+    <input type="text" required />
+
+    <h2>Parent / Guardian Information</h2>
+
+    <label>Parent / Guardian Full Name</label>
+    <input type="text" required />
+
+    <label>Email Address</label>
+    <input type="email" required />
+
+    <label>Phone Number (optional)</label>
+    <input type="tel" />
+
+    <h2>Consent & Acknowledgement</h2>
+
+    <div class="consent-section">
+
+      <div class="consent-item">
+        <input type="checkbox" required />
+        <label>
+          I confirm that I am the parent or legal guardian of the child listed above
+          and give permission for my child to participate in Skills & Innovation Academy programs.
+        </label>
+      </div>
+
+      <div class="consent-item">
+        <input type="checkbox" required />
+        <label>
+          I understand that all programs are provided for educational purposes only
+          and that individual learning outcomes may vary.
+        </label>
+      </div>
+
+      <div class="consent-item">
+        <input type="checkbox" required />
+        <label>
+          I acknowledge that some visual or media elements used in the program may be
+          created using AI-assisted tools, and that all instructional content is original
+          and developed by Skills & Innovation Academy.
+        </label>
+      </div>
+
+      <div class="consent-item">
+        <input type="checkbox" required />
+        <label>
+          I understand that Skills & Innovation Academy does not replace formal schooling,
+          certified instruction, or professional academic guidance, and that parental
+          supervision is encouraged.
+        </label>
+      </div>
+
+      <div class="consent-item">
+        <input type="checkbox" required />
+        <label>
+          I have read and agree to the
+          <a href="/terms.html" target="_blank">Terms of Service</a>
+          and
+          <a href="/privacy.html" target="_blank">Privacy Policy</a>
+          of Skills & Innovation Academy.
+        </label>
+      </div>
+
+    </div>
+
+    <h2>Electronic Signature</h2>
+
+    <label>Type Full Name as Electronic Signature</label>
+    <input type="text" required />
+
+    <label>Date</label>
+    <input type="date" required />
+
+    <button type="submit">Submit Consent & Enroll</button>
+
+    <footer>
+      © 2026 Skills & Innovation Academy |
+      <a href="mailto:contact.siaacademy@gmail.com">contact.siaacademy@gmail.com</a>
+    </footer>
+
+  </div>
+
+</body>
+</html>
