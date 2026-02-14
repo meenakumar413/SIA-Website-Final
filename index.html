@@ -69,6 +69,7 @@
             const [isDrawerOpen, setIsDrawerOpen] = useState(false);
             const [selectedProgram, setSelectedProgram] = useState(null);
             const [activeTab, setActiveTab] = useState('programs'); 
+            const [paymentMethod, setPaymentMethod] = useState('zelle');
 
             return (
                 <div className="relative min-h-screen flex flex-col">
@@ -93,19 +94,21 @@
                         </ul>
                     </nav>
 
-                    {/* HERO */}
-                    <header className="py-24 px-6 bg-sia-gradient text-white text-center">
-                        <h1 className="text-5xl md:text-6xl font-black mb-4 section-fade" key={activeTab + "-title"}>
-                            {activeTab === 'programs' && 'SIA – Our Programs'}
-                            {activeTab === 'about' && 'About the Academy'}
-                            {activeTab === 'enrollment' && 'Enrollment & Consent'}
-                        </h1>
-                        <p className="text-lg opacity-90 max-w-2xl mx-auto">
-                            {activeTab === 'programs' && '11 Core Programs tailored for the next generation of innovators.'}
-                            {activeTab === 'about' && 'Empowering the next generation of digital leaders through ethical innovation.'}
-                            {activeTab === 'enrollment' && 'Join the future. Please review our policies and provide consent to begin.'}
-                        </p>
-                    </header>
+                    {/* HERO (Only shown for main tabs) */}
+                    {['programs', 'about', 'enrollment'].includes(activeTab) && (
+                        <header className="py-24 px-6 bg-sia-gradient text-white text-center">
+                            <h1 className="text-5xl md:text-6xl font-black mb-4 section-fade" key={activeTab + "-title"}>
+                                {activeTab === 'programs' && 'SIA – Our Programs'}
+                                {activeTab === 'about' && 'About the Academy'}
+                                {activeTab === 'enrollment' && 'Enrollment & Consent'}
+                            </h1>
+                            <p className="text-lg opacity-90 max-w-2xl mx-auto">
+                                {activeTab === 'programs' && '11 Core Programs tailored for the next generation of innovators.'}
+                                {activeTab === 'about' && 'Empowering the next generation of digital leaders through ethical innovation.'}
+                                {activeTab === 'enrollment' && 'Join the future. Please review our policies and provide consent to begin.'}
+                            </p>
+                        </header>
+                    )}
 
                     {/* DYNAMIC CONTENT SECTION */}
                     <div className="flex-grow section-fade" key={activeTab}>
@@ -172,27 +175,82 @@
                             </section>
                         )}
 
+
                          {/* 3. ENROLLMENT LANDING */}
-{activeTab === 'enrollment' && (
-    <section className="py-24 px-6 bg-slate-50">
-        <div className="max-w-6xl mx-auto text-center">
-            <div className="grid md:grid-cols-2 gap-12">
-                <div className="bg-white p-12 rounded-[3rem] shadow-md hover:shadow-xl transition flex flex-col items-center">
-                    <Icon name="file-text" className="w-12 h-12 text-violet-600 mb-6" />
-                    <h3 className="text-2xl font-black mb-4">Terms & Privacy</h3>
-                    <p className="text-slate-500 mb-8">Review our Terms of Service and Privacy Policy, including child privacy protections.</p>
-                    <button onClick={() => setActiveTab('terms')} className="mt-auto px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-sia-gradient transition">View Policies</button>
-                </div>
-                <div className="bg-white p-12 rounded-[3rem] shadow-md hover:shadow-xl transition flex flex-col items-center">
-                    <Icon name="clipboard-check" className="w-12 h-12 text-emerald-600 mb-6" />
-                    <h3 className="text-2xl font-black mb-4">Parent Consent</h3>
-                    <p className="text-slate-500 mb-8">Required for students under 18. A parent or guardian must complete this form.</p>
-                    <button onClick={() => setActiveTab('consent-form')} className="mt-auto px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-sia-gradient transition">Complete Form</button>
-                </div>
-            </div>
-        </div>
-    </section>
-)}
+                        {activeTab === 'enrollment' && (
+                            <section className="py-24 px-6 bg-slate-50">
+                                <div className="max-w-6xl mx-auto text-center">
+                                    <div className="grid md:grid-cols-2 gap-12">
+                                        <div className="bg-white p-12 rounded-[3rem] shadow-md hover:shadow-xl transition flex flex-col items-center">
+                                            <Icon name="file-text" className="w-12 h-12 text-violet-600 mb-6" />
+                                            <h3 className="text-2xl font-black mb-4">Terms & Privacy</h3>
+                                            <p className="text-slate-500 mb-8">Review our Terms of Service and Privacy Policy, including child privacy protections.</p>
+                                            <button onClick={() => setActiveTab('terms')} className="mt-auto px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-sia-gradient transition">View Policies</button>
+                                        </div>
+                                        <div className="bg-white p-12 rounded-[3rem] shadow-md hover:shadow-xl transition flex flex-col items-center">
+                                            <Icon name="clipboard-check" className="w-12 h-12 text-emerald-600 mb-6" />
+                                            <h3 className="text-2xl font-black mb-4">Parent Consent</h3>
+                                            <p className="text-slate-500 mb-8">Required for students under 18. A parent or guardian must complete this form.</p>
+                                            <button onClick={() => setActiveTab('consent-form')} className="mt-auto px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-sia-gradient transition">Complete Form</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {/* 4. PAYMENT ENROLLMENT UI (New Section) */}
+                        {activeTab === 'enrollment-payment' && (
+                            <section className="py-24 px-6 bg-slate-50 min-h-[80vh] flex flex-col items-center">
+                                <button onClick={() => setActiveTab('programs')} className="mb-10 flex items-center gap-2 font-bold text-slate-500 hover:text-violet-600 transition">
+                                    <Icon name="arrow-left" className="w-4 h-4" /> Back to Programs
+                                </button>
+                                
+                                <div className="w-full max-w-md bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100">
+                                    <div className="p-10 text-center">
+                                        <h2 className="text-4xl font-black text-slate-900 mb-1">Enrollment</h2>
+                                        <p className="text-slate-400 font-bold mb-4">Kids 9–11</p>
+                                        <div className="text-5xl font-black text-violet-600 mb-10">$35</div>
+                                        
+                                        <div className="space-y-4 mb-8">
+                                            <input type="text" placeholder="Parent Full Name" className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-400 transition" />
+                                            <input type="email" placeholder="Email Address" className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-400 transition" />
+                                            <input type="text" placeholder="Student Name" className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-400 transition" />
+                                        </div>
+
+                                        <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-8">
+                                            <button 
+                                                onClick={() => setPaymentMethod('zelle')}
+                                                className={`flex-1 py-3 rounded-xl font-bold transition ${paymentMethod === 'zelle' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500'}`}
+                                            >Zelle</button>
+                                            <button 
+                                                onClick={() => setPaymentMethod('paypal')}
+                                                className={`flex-1 py-3 rounded-xl font-bold transition ${paymentMethod === 'paypal' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500'}`}
+                                            >PayPal</button>
+                                        </div>
+
+                                        {paymentMethod === 'zelle' && (
+                                            <div className="bg-violet-50 border-2 border-dashed border-violet-200 rounded-[2rem] p-6 mb-8 text-left animate-modal">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <div className="bg-violet-600 text-white rounded-full p-1"><Icon name="info" className="w-3 h-3"/></div>
+                                                    <span className="font-black text-sm text-slate-900 uppercase tracking-tight">Zelle Instructions</span>
+                                                </div>
+                                                <p className="text-sm text-slate-600 leading-relaxed">
+                                                    Send <span className="font-bold text-slate-900">$35</span> to:<br/>
+                                                    <span className="font-black text-violet-600 text-base">contact.siaacademy@gmail.com</span>
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        <button 
+                                            onClick={() => { alert('Enrollment process initiated!'); setActiveTab('programs'); }}
+                                            className="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black text-lg hover:bg-sia-gradient transition-all shadow-xl active:scale-95"
+                                        >
+                                            Confirm & Complete
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
 
                         {/* 4. TERMS OF SERVICE PAGE */}
                         {activeTab === 'terms' && (
@@ -333,7 +391,12 @@
                                             </div>
                                             <h4 className="text-xl font-black text-slate-900 mb-2">{t}</h4>
                                             <p className="text-sm text-slate-500 mb-8 font-medium">Curriculum tailored for cognitive development at this stage.</p>
-                                            <button className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-sia-gradient transition-all shadow-xl">Enroll Now</button>
+                                            <button 
+                                                onClick={() => { setSelectedProgram(null); setActiveTab('enrollment-payment'); }}
+                                                className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-sia-gradient transition-all shadow-xl"
+                                            >
+                                                Enroll Now
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
@@ -347,45 +410,26 @@
                         <div className={`absolute right-0 top-0 h-full w-full max-w-lg bg-white shadow-2xl contact-drawer ${isDrawerOpen ? 'drawer-open' : 'drawer-closed'} flex flex-col`}>
                             <div className="bg-sia-gradient p-8 text-white flex justify-between items-center">
                                 <h2 className="text-2xl font-black">Contact SIA</h2>
-                                <button onClick={() => setIsDrawerOpen(false)} className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition"><Icon name="x" className="w-6 h-6" /></button>
+                                <button onClick={() => setIsDrawerOpen(false)} className="p-2 bg-white/10 rounded-full"><Icon name="x" className="w-6 h-6" /></button>
                             </div>
-                            <div className="flex-grow overflow-y-auto p-8 space-y-10">
-                                <section>
-                                    <h3 className="text-sm font-black uppercase tracking-widest text-violet-600 mb-2">Get in Touch</h3>
-                                    <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200">
-                                        <p className="text-xs font-bold text-slate-400 mb-1 uppercase">Email us directly:</p>
-                                        <p className="text-lg font-black text-slate-900 break-all">📧 contact.siaacademy@gmail.com</p>
-                                    </div>
-                                </section>
-                                <section>
-                                    <h3 className="text-sm font-black uppercase tracking-widest text-indigo-600 mb-4">Follow Us</h3>
-                                    <div className="grid grid-cols-1 gap-3">
-                                        <a href="https://www.linkedin.com/in/meena-kumar-2756913ab" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition font-bold group">
-                                            <div className="flex items-center gap-3">
-                                                <Icon name="linkedin" className="w-5 h-5 text-indigo-600" /> 
-                                                <span>LinkedIn</span>
-                                            </div>
-                                            <span className="text-xs text-slate-400 group-hover:text-indigo-600 transition-colors">s&i.academy2026</span>
-                                        </a>
-                                        <a href="https://www.instagram.com/si_academy2026" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition font-bold group">
-                                            <div className="flex items-center gap-3">
-                                                <Icon name="instagram" className="w-5 h-5 text-pink-600" /> 
-                                                <span>Instagram</span>
-                                            </div>
-                                            <span className="text-xs text-slate-400 group-hover:text-pink-600 transition-colors">si_academy2026</span>
-                                        </a>
-                                    </div>
-                                </section>
+                            <div className="p-8 space-y-10">
+                                <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200">
+                                    <p className="text-xs font-bold text-slate-400 uppercase">Email us:</p>
+                                    <p className="text-lg font-black text-slate-900">contact.siaacademy@gmail.com</p>
+                                </div>
+                                <div className="grid grid-cols-1 gap-3">
+                                    <a href="https://www.linkedin.com/in/meena-kumar-2756913ab" target="_blank" className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl font-bold">
+                                        <span className="flex items-center gap-3"><Icon name="linkedin" className="text-indigo-600" /> LinkedIn</span>
+                                        <span className="text-xs text-slate-400">s&i.academy2026</span>
+                                    </a>
+                                    <a href="https://www.instagram.com/si_academy2026" target="_blank" className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl font-bold">
+                                        <span className="flex items-center gap-3"><Icon name="instagram" className="text-pink-600" /> Instagram</span>
+                                        <span className="text-xs text-slate-400">si_academy2026</span>
+                                    </a>
+                                </div>
                             </div>
-                            <footer className="p-8 border-t text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">© 2026 Skills and Innovation Academy (SIA)</footer>
                         </div>
                     </div>
-
-
-                    {/* FLOATING CONTACT ICON */}
-                    <button onClick={() => setIsDrawerOpen(true)} className="fixed bottom-8 right-8 w-16 h-16 bg-sia-gradient text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40">
-                        <Icon name="message-circle" className="w-8 h-8" />
-                    </button>
 
                     <footer className="py-12 border-t text-center text-slate-400 text-sm font-bold">
                         © 2026 Skills and Innovation Academy (SIA)
